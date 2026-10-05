@@ -82,6 +82,12 @@ main{overflow-x:clip}
 @keyframes lineIn{to{opacity:1;transform:none}}
 .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;will-change:transform,opacity}
 .hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,25,40,.55) 0%,rgba(17,25,40,.35) 45%,rgba(17,25,40,0) 75%),linear-gradient(0deg,var(--page) 0%,rgba(17,25,40,0) 22%)}
+.scroll-cue{position:absolute;left:50%;bottom:20px;z-index:2;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--text-2);transition:opacity .4s}
+.scroll-cue i{position:relative;width:1px;height:40px;background:rgba(156,163,175,.25);overflow:hidden}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:0;width:1px;height:100%;background:var(--g400);animation:cue 1.8s cubic-bezier(.6,0,.4,1) infinite}
+@keyframes cue{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+.js .scroll-cue{opacity:0;animation:cueIn .8s 1.2s forwards}
+@keyframes cueIn{to{opacity:1}}
 .strands{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.6}
 .strands .base{stroke:rgba(156,163,175,.22);stroke-width:1.2;fill:none}
 .strands .flow{stroke:var(--g400);stroke-width:1.6;fill:none;stroke-dasharray:3 18;animation:flow 2.4s linear infinite;opacity:.8}
@@ -394,6 +400,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
       <p class="lead line-in" style="--d:.55s">Field ingests every system a firm runs, resolves it into one canonical household record, and delivers clean, auditable, AI-ready data to the advice and business workflows on top.</p>
     </div>
     <div class="hero-bg" aria-hidden="true"><svg class="strands"></svg></div>
+    <div class="scroll-cue" aria-hidden="true">Scroll<i></i></div>
   </section>
 
   <!-- 01 FLOW -->
@@ -733,6 +740,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
     heroInner.style.opacity = 1 - p*1.1;
     heroBg.style.transform = 'translateY(' + (p*60) + 'px)';
     heroBg.style.opacity = 1 - p*0.9;
+    cue.style.visibility = p > 0.08 ? 'hidden' : 'visible';
     var max = document.documentElement.scrollHeight - innerHeight;
     bar.style.transform = 'scaleX(' + (max > 0 ? scrollY / max : 0) + ')';
   }
@@ -745,6 +753,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
     $$('.reveal').forEach(function(el){ el.classList.add('in'); });
   }
   /* ---- hero background: every source system streaming into one record, full bleed ---- */
+  var cue = document.querySelector('.scroll-cue');
   var hero = document.querySelector('.hero'), heroBg = document.querySelector('.hero-bg'), hsvg = heroBg.querySelector('svg');
   var SOURCES = ['Schwab','Fidelity','Salesforce','Orion','Pershing','Wealthbox','Addepar','SEI','Redtail','Black Diamond','First Clearing','Tamarac','Altruist','Billing','API','CSV'];
   function buildHeroBg(){
