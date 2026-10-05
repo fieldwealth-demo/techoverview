@@ -289,10 +289,13 @@ main{overflow-x:clip}
 @media (max-width:899px){
   .compare-grid{grid-template-columns:1fr}
   .compare-grid{gap:0}
-  .pane-track{display:block;position:relative;height:calc(var(--ph) + 90vh)}
-  .pane-track.short{height:calc(var(--ph) + 60vh)}
-  .pane{--ph:min(560px,calc(100svh - 150px));height:var(--ph);position:sticky;top:calc(50vh - var(--ph) / 2 + 24px)}
-  .pane-head{flex-wrap:wrap}
+  /* each chat parks mid-screen and plays out over a long scroll */
+  .pane-track{display:block;position:relative;--ph:min(560px,calc(100svh - 140px));height:calc(var(--ph) + 200vh)}
+  .pane-track.short{--ph:min(640px,calc(100svh - 104px));height:calc(var(--ph) + 130vh)}
+  .pane{height:var(--ph);position:sticky;top:max(72px,calc(50vh - var(--ph) / 2 + 24px))}
+  .pane.field .chat{justify-content:flex-start;-webkit-mask-image:none;mask-image:none}
+  .kv{grid-template-columns:76px 1fr;font-size:13px;gap:5px 10px}
+  .lineage .chip{font-size:11.5px;padding:2px 8px}
   .scene-head .aside{max-width:none}
 }
 
@@ -330,6 +333,7 @@ main{overflow-x:clip}
 .contact .who span{font-size:14px;color:var(--text-2)}
 .contact .site{font-weight:600;font-size:15px;padding:0 8px}
 .avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--g600);font-weight:700;font-size:16px}
+@media (max-width:520px){.pane-head .pill{display:none}}
 @media (max-width:520px){.contact{border-radius:24px;flex-direction:column;padding:24px;text-align:center}}
 footer{border-top:1px solid rgba(75,85,99,.4);padding:32px 0 48px}
 footer .logo{font-size:20px}
@@ -486,10 +490,10 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
             <div class="chat">
               <div class="msg user" data-at="0.04"><div class="bubble"><p>Give me the full picture on the Anderson household before tomorrow's review.</p></div></div>
               <div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>
-              <div class="msg" data-at="0.16"><span class="av"><svg viewBox="0 0 24 24"><path d="M4 10V4h6M20 14v6h-6"/></svg></span>
+              <div class="msg" data-at="0.2"><span class="av"><svg viewBox="0 0 24 24"><path d="M4 10V4h6M20 14v6h-6"/></svg></span>
                 <div class="bubble answer">
                   <h4>Anderson household <span>· hh_anderson_001</span></h4>
-                  <dl class="kv" data-at="0.2">
+                  <dl class="kv" data-at="0.22">
                     <dt>Members</dt><dd>Robert · Jane · Anderson Family Trust</dd>
                     <dt>Accounts</dt><dd>6 linked across 4 systems</dd>
                     <dt>Total AUM</dt><dd><b>$4,295,880</b></dd>
@@ -501,7 +505,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
                 </div>
               </div>
             </div>
-            <div class="pane-foot" data-at="0.3"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Answered in one step, with full lineage.</div>
+            <div class="pane-foot" data-at="0.36"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Answered in one step, with full lineage.</div>
           </div></div>
         </div>
         <p class="compare-note">Illustrative example.</p>
@@ -517,7 +521,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
       <div class="delivery-grid">
         <div class="dcard reveal" style="--d:.1s">
           <svg viewBox="0 0 44 44" aria-hidden="true"><rect x="4" y="8" width="36" height="28" rx="4"/><path d="M4 15h36M9 11.5h.01M13 11.5h.01M10 22h10M10 27h16M28 22h6v8h-6z"/></svg>
-          <div><h3>Field Application</h3><p>The UI — ready to use from day one.</p></div>
+          <div><h3>Field Application</h3><p>Explore resolved households, signals and lineage in Field’s own interface.</p></div>
         </div>
         <div class="dcard reveal" style="--d:.2s">
           <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M16 6v9M28 6v9M11 15h22v6a11 11 0 0 1-22 0z"/><path d="M22 32v7"/></svg>
@@ -715,7 +719,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justif
     else panes.forEach(function(pn){
       // phones: starts once the pane is parked in the middle of the screen
       var tr = pn.el.parentNode.getBoundingClientRect(), ph = pn.el.offsetHeight;
-      var start = (innerHeight - ph)/2 + 24;
+      var start = Math.max(72, (innerHeight - ph)/2 + 24);
       updPane(pn, clamp((start - tr.top) / Math.max(1, tr.height - ph)));
     });
   }
